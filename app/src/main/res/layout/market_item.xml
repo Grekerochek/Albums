@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_marginBottom="22dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="?selectableItemBackground" >
+
+    <ImageView
+        android:id="@+id/marketImageView"
+        android:layout_width="158dp"
+        android:layout_height="158dp"
+        android:layout_marginBottom="8dp"
+        tools:src="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/marketTitleView"
+        style="@style/FadeStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorMarket"
+        android:textSize="13sp"
+        android:gravity="center"
+        tools:text="Товар" />
+
+    <TextView
+        android:id="@+id/marketPriceView"
+        style="@style/FadeStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        android:gravity="center"
+        tools:text="100 рублей" />
+
+</LinearLayout>
