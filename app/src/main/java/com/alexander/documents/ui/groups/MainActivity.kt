@@ -28,8 +28,10 @@ import com.alexander.documents.entity.Album
  */
 class MainActivity : AppCompatActivity() {
 
+    private var stateIsEdit: Boolean = false
+
     private val albumsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        AlbumsAdapter(::onAlbumClick)
+        AlbumsAdapter(::onAlbumClick, ::onAlbumLongClick)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,33 +46,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             init()
         }
-    }
-
-    private fun animation() {
-        val rotate = RotateAnimation(
-            0f, 360f,
-            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-            0.5f
-        )
-
-        val an = AnimationSet(true)
-        an.isFillEnabled = true
-        an.interpolator = BounceInterpolator()
-
-        val ta = TranslateAnimation(-300f, 100f, 0f, 0f)
-        ta.duration = 2000
-        an.addAnimation(ta)
-
-        val ta2 = TranslateAnimation(100f, 0f, 0f, 0f)
-        ta2.duration = 2000
-        ta2.startOffset = 2000 // allowing 2000 milliseconds for ta to finish
-        an.addAnimation(ta2)
-
-        an.addAnimation(rotate)
-
-        rotate.duration = 4000
-        rotate.repeatCount = Animation.INFINITE
-        toolbarButton.animation = an
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -133,6 +108,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onAlbumClick(album: Album) {
+    }
+
+    private fun onAlbumLongClick(position: Int, album: Album): Boolean {
+        stateIsEdit = true
+        toolbarTitleView.text = getString(R.string.edit_title)
+        toolbarExitButton.visibility = View.VISIBLE
+        toolbarExitButton.setOnClickListener { resetState() }
+        toolbarAddButton.visibility = View.GONE
+        toolbarEditButton.visibility = View.GONE
+        return true
+    }
+
+    private fun resetState() {
+
     }
 
     companion object {

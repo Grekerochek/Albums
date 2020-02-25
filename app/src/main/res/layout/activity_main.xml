@@ -19,33 +19,62 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
+                android:layout_marginEnd="4dp">
+
+                <ImageView
+                    android:id="@+id/toolbarExitButton"
+                    android:layout_width="38dp"
+                    android:layout_height="48dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:tint="@color/colorLightBlue"
+                    android:src="@drawable/ic_back_outline_28"
+                    android:visibility="gone"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/toolbarTitleView"
                     style="@style/FadeStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/app_name"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constrainedWidth="true"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/toolbarButton"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/toolbarEditButton"
+                    app:layout_constraintStart_toEndOf="@id/toolbarExitButton"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/toolbarButton"
-                    android:layout_width="30dp"
-                    android:layout_height="28dp"
-                    android:padding="7dp"
+                    android:id="@+id/toolbarEditButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="10dp"
                     android:tint="@color/colorLightBlue"
+                    android:src="@drawable/ic_edit_outline_28"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/toolbarTitleView"
+                    app:layout_constraintEnd_toStartOf="@id/toolbarAddButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/toolbarAddButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="10dp"
+                    android:tint="@color/colorLightBlue"
+                    android:src="@drawable/ic_add_outline_28"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/toolbarTitleView"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
