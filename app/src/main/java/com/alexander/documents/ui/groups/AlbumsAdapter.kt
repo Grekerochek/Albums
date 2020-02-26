@@ -19,7 +19,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
  */
 class AlbumsAdapter(
     private val albumClickListener: (Album) -> Unit,
-    private val albumLongClickListener: (position: Int, Album) -> Boolean
+    private val albumLongClickListener: () -> Boolean,
+    private val removeClickListener: (position: Int, Album) -> Unit
 ) : ListAdapter<Album, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var albums: MutableList<Album> = mutableListOf()
@@ -41,9 +42,11 @@ class AlbumsAdapter(
         with(holder.itemView) {
             setOnClickListener { albumClickListener(album) }
             setOnLongClickListener {
-                albumLongClickListener(holder.adapterPosition, album)
+                albumLongClickListener()
             }
 
+            albumViewSelected.setOnClickListener { removeClickListener(holder.adapterPosition, album) }
+            albumViewSelected.visibility = View.GONE
             albumTitleView.text = album.title
             albumCountView.text = context.getString(R.string.count_text, album.size.toString())
 
@@ -59,31 +62,16 @@ class AlbumsAdapter(
         }
     }
 
-    private fun animateView(viewForAnimation: View) {
-        val rotate = RotateAnimation(
-            0f, 360f,
-            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-            0.5f
-        )
+    fun animateState() {
+        notifyItemRangeChanged(0, albums.size, ACTION_ANIMATE_ALBUMS)
+    }
 
-        val an = AnimationSet(true)
-        an.isFillEnabled = true
-        an.interpolator = BounceInterpolator()
+    fun resetState() {
+        notifyDataSetChanged()
+    }
 
-        val ta = TranslateAnimation(-300f, 100f, 0f, 0f)
-        ta.duration = 2000
-        an.addAnimation(ta)
-
-        val ta2 = TranslateAnimation(100f, 0f, 0f, 0f)
-        ta2.duration = 2000
-        ta2.startOffset = 2000 // allowing 2000 milliseconds for ta to finish
-        an.addAnimation(ta2)
-
-        an.addAnimation(rotate)
-
-        rotate.duration = 4000
-        rotate.repeatCount = Animation.INFINITE
-        viewForAnimation.animation = an
+    companion object {
+        const val ACTION_ANIMATE_ALBUMS: String = "action_animate_albums"
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Album>() {

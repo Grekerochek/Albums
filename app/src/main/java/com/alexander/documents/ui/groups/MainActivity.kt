@@ -13,15 +13,11 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import kotlinx.android.synthetic.main.activity_main.*
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
-import android.view.animation.AnimationSet
-import android.view.animation.TranslateAnimation
-import android.view.animation.BounceInterpolator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexander.documents.R
 import com.alexander.documents.api.AlbumsRequest
 import com.alexander.documents.entity.Album
+import com.alexander.documents.ui.markets.AlbumDetailsActivity
 
 /**
  * author alex
@@ -30,8 +26,10 @@ class MainActivity : AppCompatActivity() {
 
     private var stateIsEdit: Boolean = false
 
+    private val albumsForDelete: MutableList<Album> = mutableListOf()
+
     private val albumsAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        AlbumsAdapter(::onAlbumClick, ::onAlbumLongClick)
+        AlbumsAdapter(::onAlbumClick, ::onAlbumLongClick, ::onRemoveClick)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,9 +65,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         recyclerViewAlbums.layoutManager = GridLayoutManager(this, 2)
         recyclerViewAlbums.adapter = albumsAdapter
+        recyclerViewAlbums.itemAnimator = AlbumsAnimator()
         containerView.setOnRefreshListener {
             requestAlbums()
         }
+        toolbarEditButton.setOnClickListener { onAlbumLongClick() }
         requestAlbums()
     }
 
@@ -108,20 +108,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onAlbumClick(album: Album) {
+        if (stateIsEdit) {
+            if (albumsForDelete.any { it.id == album.id }) {
+                return
+            }
+
+        } else {
+            startActivity(AlbumDetailsActivity.createIntent(this, album))
+        }
     }
 
-    private fun onAlbumLongClick(position: Int, album: Album): Boolean {
+    private fun onRemoveClick(position: Int, album: Album) {
+
+    }
+
+    private fun onAlbumLongClick(): Boolean {
+        if (stateIsEdit) {
+            return true
+        }
         stateIsEdit = true
         toolbarTitleView.text = getString(R.string.edit_title)
         toolbarExitButton.visibility = View.VISIBLE
         toolbarExitButton.setOnClickListener { resetState() }
         toolbarAddButton.visibility = View.GONE
         toolbarEditButton.visibility = View.GONE
+        albumsAdapter.animateState()
         return true
     }
 
     private fun resetState() {
-
+        stateIsEdit = false
+        toolbarTitleView.text = getString(R.string.app_name)
+        toolbarExitButton.visibility = View.GONE
+        toolbarAddButton.visibility = View.VISIBLE
+        toolbarEditButton.visibility = View.VISIBLE
+        albumsAdapter.resetState()
     }
 
     companion object {
