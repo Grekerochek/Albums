@@ -41,6 +41,8 @@ class AlbumsAnimator : DefaultItemAnimator() {
             if (AlbumsAdapter.ACTION_ANIMATE_ALBUMS == preInfo.updateAction) {
                 holder.itemView.albumViewSelected.visibility = View.VISIBLE
                 animateView(holder.itemView)
+            } else if (AlbumsAdapter.ACTION_SET_ALPHA_TO_ALBUM == preInfo.updateAction) {
+                holder.itemView.alpha = 0.5f
             }
         }
         return false

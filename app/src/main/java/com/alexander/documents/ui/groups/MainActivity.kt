@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.widget.EditText
+import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
@@ -15,6 +18,8 @@ import com.vk.api.sdk.auth.VKScope
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexander.documents.R
+import com.alexander.documents.api.AlbumRequestCreate
+import com.alexander.documents.api.AlbumRequestDelete
 import com.alexander.documents.api.AlbumsRequest
 import com.alexander.documents.entity.Album
 import com.alexander.documents.ui.markets.AlbumDetailsActivity
@@ -25,8 +30,6 @@ import com.alexander.documents.ui.markets.AlbumDetailsActivity
 class MainActivity : AppCompatActivity() {
 
     private var stateIsEdit: Boolean = false
-
-    private val albumsForDelete: MutableList<Album> = mutableListOf()
 
     private val albumsAdapter by lazy(LazyThreadSafetyMode.NONE) {
         AlbumsAdapter(::onAlbumClick, ::onAlbumLongClick, ::onRemoveClick)
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity() {
             requestAlbums()
         }
         toolbarEditButton.setOnClickListener { onAlbumLongClick() }
+        toolbarAddButton.setOnClickListener { onAlbumAddClick() }
         requestAlbums()
     }
 
@@ -80,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 if (!isFinishing) {
                     containerView.isRefreshing = false
                     albumsAdapter.albums = result.toMutableList()
+                    resetState()
                 }
             }
 
@@ -109,17 +114,56 @@ class MainActivity : AppCompatActivity() {
 
     private fun onAlbumClick(album: Album) {
         if (stateIsEdit) {
-            if (albumsForDelete.any { it.id == album.id }) {
-                return
-            }
-
-        } else {
-            startActivity(AlbumDetailsActivity.createIntent(this, album))
+            return
         }
+        startActivity(AlbumDetailsActivity.createIntent(this, album))
     }
 
-    private fun onRemoveClick(position: Int, album: Album) {
+    private fun onRemoveClick(albumId: Int) {
+        containerView.isRefreshing = true
+        VK.execute(AlbumRequestDelete(albumId), object : VKApiCallback<Int> {
+            override fun success(result: Int) {
+                if (!isFinishing && result == 1) {
+                    containerView.isRefreshing = false
+                    requestAlbums()
+                }
+            }
 
+            override fun fail(error: Exception) {
+                showError()
+            }
+        })
+    }
+
+    private fun onAlbumAddClick() {
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        AlertDialog.Builder(this)
+            .setTitle(R.string.insert_title)
+            .setView(input)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                createAlbum(input.text.toString())
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+            .show()
+        (input.layoutParams as FrameLayout.LayoutParams).marginStart = 50
+        (input.layoutParams as FrameLayout.LayoutParams).marginEnd = 50
+    }
+
+    private fun createAlbum(title: String) {
+        containerView.isRefreshing = true
+        VK.execute(AlbumRequestCreate(title), object : VKApiCallback<Album> {
+            override fun success(result: Album) {
+                if (!isFinishing) {
+                    containerView.isRefreshing = false
+                    requestAlbums()
+                }
+            }
+
+            override fun fail(error: Exception) {
+                showError()
+            }
+        })
     }
 
     private fun onAlbumLongClick(): Boolean {
@@ -146,7 +190,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-
         fun createIntent(context: Context) {
             val intent = Intent(context, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP

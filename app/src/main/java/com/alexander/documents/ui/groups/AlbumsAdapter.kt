@@ -1,7 +1,6 @@
 package com.alexander.documents.ui.groups
 
 import android.view.*
-import android.view.animation.*
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 class AlbumsAdapter(
     private val albumClickListener: (Album) -> Unit,
     private val albumLongClickListener: () -> Boolean,
-    private val removeClickListener: (position: Int, Album) -> Unit
+    private val removeClickListener: (albumId: Int) -> Unit
 ) : ListAdapter<Album, RecyclerView.ViewHolder>(DiffCallback()) {
 
     var albums: MutableList<Album> = mutableListOf()
@@ -45,7 +44,7 @@ class AlbumsAdapter(
                 albumLongClickListener()
             }
 
-            albumViewSelected.setOnClickListener { removeClickListener(holder.adapterPosition, album) }
+            albumViewSelected.setOnClickListener { removeClickListener(album.id) }
             albumViewSelected.visibility = View.GONE
             albumTitleView.text = album.title
             albumCountView.text = context.getString(R.string.count_text, album.size.toString())
@@ -63,7 +62,13 @@ class AlbumsAdapter(
     }
 
     fun animateState() {
-        notifyItemRangeChanged(0, albums.size, ACTION_ANIMATE_ALBUMS)
+        albums.withIndex().forEach { (index, album) ->
+            if (album.id > 0) {
+                notifyItemChanged(index, ACTION_ANIMATE_ALBUMS)
+            } else {
+                notifyItemChanged(index, ACTION_SET_ALPHA_TO_ALBUM)
+            }
+        }
     }
 
     fun resetState() {
@@ -72,6 +77,7 @@ class AlbumsAdapter(
 
     companion object {
         const val ACTION_ANIMATE_ALBUMS: String = "action_animate_albums"
+        const val ACTION_SET_ALPHA_TO_ALBUM: String = "action_alpha_albums"
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Album>() {

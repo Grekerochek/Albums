@@ -3,6 +3,7 @@
     <string name="edit_title">Редактирование</string>
     <string name="error_auth_message">Не удалось авторизироваться, попробовать еще раз?</string>
     <string name="count_text">%s фотографий</string>
+    <string name="insert_title">Введите название альбома</string>
     <string name="error_message">Не удалось выполнить операцию, попробуйте позже</string>
     <string name="error">Ошибка</string>
     <string name="ok">Ок</string>

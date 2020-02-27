@@ -13,8 +13,7 @@ data class Album(
     val title: String = "",
     val description: String = "",
     val size: Int = 0,
-    val photoUrl: String = "",
-    var isSelected: Boolean = false
+    val photoUrl: String = ""
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -23,8 +22,7 @@ data class Album(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readInt(),
-        parcel.readString()!!,
-        parcel.readByte() == 1.toByte()
+        parcel.readString()!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -34,7 +32,6 @@ data class Album(
         parcel.writeString(description)
         parcel.writeInt(size)
         parcel.writeString(photoUrl)
-        parcel.writeByte(if (isSelected) 1.toByte() else 0.toByte())
     }
 
     override fun describeContents(): Int {
