@@ -1,7 +1,7 @@
 package com.alexander.documents
 
 import android.app.Application
-import com.alexander.documents.ui.groups.MainActivity
+import com.alexander.documents.ui.albums.MainActivity
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKTokenExpiredHandler
 

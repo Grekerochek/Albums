@@ -52,7 +52,7 @@ class AlbumRequestDelete(
             .args("album_id", albumId)
             .version(manager.config.version)
             .build()
-        return manager.execute(call, ResponseApiParserAlbumDelete())
+        return manager.execute(call, ResponseApiParserAlbumOrPhotoDelete())
     }
 }
 
@@ -131,7 +131,20 @@ private class ResponseApiParserAlbums : VKApiResponseParser<List<Album>> {
     }
 }
 
-private class ResponseApiParserAlbumDelete : VKApiResponseParser<Int> {
+class PhotoRequestDelete(
+    private val photoId: Int
+) : ApiCommand<Int>() {
+    override fun onExecute(manager: VKApiManager): Int {
+        val call = VKMethodCall.Builder()
+            .method("photos.delete")
+            .args("photo_id", photoId)
+            .version(manager.config.version)
+            .build()
+        return manager.execute(call, ResponseApiParserAlbumOrPhotoDelete())
+    }
+}
+
+private class ResponseApiParserAlbumOrPhotoDelete : VKApiResponseParser<Int> {
     override fun parse(response: String): Int {
         try {
             return JSONObject(response).optInt("response")

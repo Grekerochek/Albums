@@ -5,9 +5,7 @@
     android:layout_height="228dp"
     android:layout_marginEnd="12dp"
     android:layout_marginBottom="20dp"
-    android:background="?selectableItemBackground"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:background="?selectableItemBackground">
 
     <ImageView
         android:id="@+id/albumImageView"
@@ -18,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@id/albumTitleView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@color/colorGrey" />
+        tools:src="@color/colorBlack" />
 
 
     <ImageView

@@ -3,20 +3,8 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlue">#4986CC</color>
     <color name="colorLightBlue">#3F8AE0</color>
     <color name="colorAccent">#000000</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorGrey">#818C99</color>
-    <color name="roundCornersDeleteColor">#0f001C3D</color>
-    <color name="colorMarket">#71757A</color>
     <color name="colorDescription">#909499</color>
-    <color name="colorIcons">#99A2AD</color>
-
-    <color name="colorText">#293F8AE0</color>
-    <color name="colorMusic">#293F8AE0</color>
-    <color name="colorVideo">#29AB75E0</color>
-    <color name="colorZip">#294BB34B</color>
-    <color name="colorBook">#29FFA000</color>
-    <color name="colorOther">#293F8AE0</color>
 </resources>

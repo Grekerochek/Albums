@@ -16,8 +16,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ui.marketdetails.MarketDetailsActivity" />
-        <activity android:name=".ui.markets.AlbumDetailsActivity" />
-        <activity android:name=".ui.groups.MainActivity">
+        <activity android:name=".ui.photos.AlbumDetailsActivity" />
+        <activity android:name=".ui.albums.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

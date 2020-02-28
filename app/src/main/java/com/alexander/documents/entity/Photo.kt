@@ -4,6 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import org.json.JSONObject
 
+/**
+ * author alex
+ */
 data class Photo(
     val id: Int = 0,
     val url: String = ""

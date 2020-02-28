@@ -33,7 +33,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:tint="@color/colorLightBlue"
-                    android:src="@drawable/ic_back_outline_28"
+                    android:src="@drawable/ic_cancel_outlne_28"
                     android:visibility="gone"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintBottom_toBottomOf="parent"
